@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quotify</title>
+    <script src="js/react.development.js"></script>
+    <script src="js/react-dom.development.js"></script>
+    <script src="js/babel.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script type="text/babel">
+        const appHandle = document.getElementById('app');
+        let data;
+
+        function Heading(props){
+            return <h1>{props.title}</h1>
+        };
+
+        
+
+        class Quotes extends React.Component {
+            constructor(props){
+                super(props);
+                this.state = {
+                    array: JSON.parse(localStorage.getItem("key"))
+
+                }
+                this.changeDelete = this.changeDelete.bind(this)
+                this.changeEdit = this.changeEdit.bind(this)
+            }
+
+            changeDelete(e) {
+                let n1 = e.target.value;
+                //console.log(JSON.parse(localStorage.getItem('key')))
+               this.setState(prevState => {
+                   prevState.array.splice(n1,1)
+                  localStorage.setItem('key',JSON.stringify(prevState.array));
+               });
+               e.target.parentNode.remove();
+            }
+
+            changeEdit(e) {
+
+            }
+
+        render(){
+            return (
+                <div>
+                    <p><a href="./index.html">Random Quote(api)</a> | <a href="./local-quote.html">Random Quote(local)</a> | <a href="./add-quote.html">Add Quote</a> | <a href="./list-quotes.html">List All Quotes(local)</a></p>
+                    <h4>Listing quotes</h4>
+                    <ul>
+                        {this.state.array.map((quote,i) => {
+                       return <li key={i}>
+                         <h2>{quote.quote}<br/></h2>
+                         <h4>{quote.author}</h4><br/>
+                            <button onClick={this.changeEdit} value={i}>Edit</button>
+                            <button onClick={this.changeDelete} value={i}>Delete</button>
+                       </li>
+                         })}
+                    </ul>
+                </div>
+            )
+        }
+    }
+
+       function App(){
+            return (
+               <div>
+                    <Heading title="Quotify" />
+                    <Quotes />
+                </div>
+            )
+       }
+
+       ReactDOM.render(<App />,appHandle);
+    </script>
+</body>
+</html>

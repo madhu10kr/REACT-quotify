@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quotify</title>
+    <script src="js/react.development.js"></script>
+    <script src="js/react-dom.development.js"></script>
+    <script src="js/babel.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script type="text/babel">
+        const appHandle = document.getElementById('app');
+        let i = 0;
+
+        function Heading(props){
+            return <h1>{props.title}</h1>
+        }
+
+        class Quotes extends React.Component {
+            constructor(props){
+                super(props);
+                this.state = {
+                    quoteValue :'',
+                    authorValue : '',
+                    array : JSON.parse(localStorage.getItem('key'))
+                }
+                this.saveToDB = this.saveToDB.bind(this)
+                this.changeQuote = this.changeQuote.bind(this)
+                this.changeAuthor = this.changeAuthor.bind(this)
+            }
+
+            changeQuote(e){
+                this.setState({
+                    quoteValue : e.target.value
+                })
+            }
+
+            changeAuthor(e){
+                this.setState({
+                    authorValue : e.target.value
+                })
+            }
+
+            saveToDB(){
+                let data = {
+                    author: this.state.authorValue,
+                    quote: this.state.quoteValue
+                }
+                this.setState(prevState => {
+                    prevState.array.push(data)
+                    localStorage.setItem('key',JSON.stringify(prevState.array))
+                })
+            }
+            
+        render(){
+            return (
+                <div>
+                    <p><a href="./index.html">Random Quote(api)</a> | <a href="./local-quote.html">Random Quote(local)</a> | <a href="./add-quote.html">Add Quote</a> | <a href="./list-quotes.html">List All Quotes(local)</a></p>
+                    <p>quote</p>
+                    <textarea onChange={this.changeQuote}></textarea>
+                    <br/>
+                    <p>Author</p>
+                    <input type="text" onChange={this.changeAuthor}></input>
+                    <br/>
+                    <button onClick={this.saveToDB}>Save</button>
+                </div>
+            )
+        }
+    }
+
+       function App(){
+            return (
+               <div>
+                    <Heading title="Quotify" />
+                    <Quotes />
+                </div>
+            )
+       }
+
+       ReactDOM.render(<App />,appHandle);
+    </script>
+</body>
+</html>
