@@ -12,7 +12,6 @@
 
     <script type="text/babel">
         const appHandle = document.getElementById('app');
-        let i = 0;
 
         function Heading(props){
             return <h1>{props.title}</h1>
@@ -23,8 +22,7 @@
                 super(props);
                 this.state = {
                     quoteValue :'',
-                    authorValue : '',
-                    array : JSON.parse(localStorage.getItem('key'))
+                    authorValue : ''
                 }
                 this.saveToDB = this.saveToDB.bind(this)
                 this.changeQuote = this.changeQuote.bind(this)
@@ -48,10 +46,9 @@
                     author: this.state.authorValue,
                     quote: this.state.quoteValue
                 }
-                this.setState(prevState => {
-                    prevState.array.push(data)
-                    localStorage.setItem('key',JSON.stringify(prevState.array))
-                })
+                let localData = JSON.parse(localStorage.getItem('key'));
+                localData.push(data);
+                localStorage.setItem('key',JSON.stringify(localData));
             }
             
         render(){
